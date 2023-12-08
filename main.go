@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"strconv"
 	"strings"
+	"strconv"
 )
 
 // Dados representa a estrutura dos dados a serem ordenados
@@ -16,18 +16,14 @@ type Dados struct {
 	Pontuacao int
 }
 
-// PorNomeIdade implementa a interface Sort para ordenar por Nome e Idade
-type PorNomeIdade []Dados
+// PorNome implementa a interface Sort para ordenar por Nome
+type PorNome []Dados
 
-func (a PorNomeIdade) Len() int      { return len(a) }
-func (a PorNomeIdade) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
-func (a PorNomeIdade) Less(i, j int) bool {
-	// Ordenar por Nome usando a tabela ASCII (case-insensitive)
-	if strings.ToLower(a[i].Nome) != strings.ToLower(a[j].Nome) {
-		return strings.ToLower(a[i].Nome) < strings.ToLower(a[j].Nome)
-	}
-	// Se os nomes são iguais, ordenar por Idade
-	return a[i].Idade < a[j].Idade
+func (a PorNome) Len() int      { return len(a) }
+func (a PorNome) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a PorNome) Less(i, j int) bool {
+	// Ordenar por Nome (case-sensitive)
+	return strings.ToLower(a[i].Nome) < strings.ToLower(a[j].Nome)
 }
 
 // LerArquivo lê dados de um arquivo CSV
@@ -93,9 +89,9 @@ func EscreverArquivo(nomeArquivo string, dados []Dados) error {
 	return escritorCSV.Error()
 }
 
-// OrdenarDados ordena os dados por nome e por idade
+// OrdenarDados ordena os dados por nome
 func OrdenarDados(dados []Dados) {
-	sort.Sort(PorNomeIdade(dados))
+	sort.Sort(PorNome(dados))
 }
 
 func main() {
@@ -114,7 +110,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Ordenar os dados
+	// Ordenar os dados por nome
 	OrdenarDados(dados)
 
 	// Escrever dados ordenados no arquivo de saída
